@@ -25,19 +25,18 @@ func putWithCallback(c chan<- int, numGoroutines, limit int) {
 		if done == numGoroutines {
 			fmt.Println("Closing channel")
 			close(c)
-			return
 		}
 	}
 
-	put := func(c chan<- int, limit int, callback func()) {
+	put := func(c chan<- int, limit int) {
 		for i := 0; i < limit; i++ {
 			c <- i
 		}
-		callback()
+		iAmDone()
 	}
 
 	for i := 0; i < numGoroutines; i++ {
-		go put(c, limit, iAmDone)
+		go put(c, limit)
 	}
 
 }
